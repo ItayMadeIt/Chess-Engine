@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include<bitset>
+#include <map>
 
 
 #ifndef CHESSMAIN_HEADER
@@ -30,8 +31,6 @@ public:
 
 	static void Initailize(SDL_Renderer* renderer);
 
-	static int StrToBinary(const char* pieceType);
-
 	static SDL_Texture* TextureByIndex(int type);
 
 	static bool IncludesPoint(vector<SDL_Point> list, SDL_Point point);
@@ -45,5 +44,7 @@ public:
 	static bitset<3> PieceY(bitset<10> piece);
 
 	static void PieceSetPos(std::vector<std::bitset<10>>& pieces, bitset<10>& piece, int x, int y);
+
+	static void PieceSetPos(bitset<10>& piece, int x, int y);
 };
 #endif // !CHESSMAIN_HEADER

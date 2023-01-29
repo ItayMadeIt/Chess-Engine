@@ -3,19 +3,17 @@
 #include <string>
 #include "ChessMain.h"
 #include "Board.h"
+#include "GameManager.h"
 
 
 static int WIDTH = 800, HEIGHT = 800;
 
-static int DESIRED_FPS = 1250;
+static int DESIRED_FPS = 350;
 
 bool running, fullscreen;
 
 SDL_Renderer* renderer;
 SDL_Window* window;
-
-bool clicking;
-Piece* clickedPiece;
 
 int mouseX = 0, mouseY = 0;
 
@@ -24,33 +22,7 @@ SDL_Rect basicFrame{ 0, 0, 100, 100 };
 SDL_Color darkColor = { 171, 87, 36, 255 };
 SDL_Color lightColor = { 237, 167, 26, 255 };
 
-
-
-Piece* getClickedPiece(int x, int y) {
-    Piece* clickedPiece = Board::Get()->getPiece(x / 100.0f, y / 100.0f);
-    if (clickedPiece != nullptr) {
-        return clickedPiece;
-    }
-    return nullptr;
-}
-
-void CheckReleasePiece() {
-    SDL_Point point = { mouseX / 100, mouseY / 100 };
-
-    if (ChessMain::IncludesPoint(Board::Get()->AvailableMoves(clickedPiece), point)) {
-        Board::Get()->setPiecePosition(clickedPiece, mouseX / 100, mouseY / 100);
-        clickedPiece->SetPosition(mouseX / 100, mouseY / 100);
-        clicking = false;
-        clickedPiece = nullptr;
-    }
-    else {
-        Board::Get()->setPiecePosition(clickedPiece, clickedPiece->GetX(), clickedPiece->GetY());
-        clickedPiece->SetPosition(clickedPiece->GetX(), clickedPiece->GetY());
-        clicking = false;
-        clickedPiece = nullptr;
-    }
-    
-}
+GameManager* GM;
 
 void handleInput() {
     SDL_Event event;
@@ -80,21 +52,12 @@ void handleInput() {
             break;
         case SDL_MOUSEBUTTONDOWN:
             if (event.button.button == SDL_BUTTON_LEFT && event.button.state == SDL_PRESSED) {
-                // Releasing the piece onto "this" square
-                if (clicking && clickedPiece != nullptr) {
-                    CheckReleasePiece();
-                    break;
-                }
-                // Getting the a new piece if clicked
-                clickedPiece = getClickedPiece(mouseX , mouseY);
-
-                if (clickedPiece != nullptr)
-                    clicking = true;
-                
+                std::cout << GM->GetX() << ", " << GM->GetY() << std::endl;
+                GM->OnLeftMButton();
             }
         case SDL_MOUSEMOTION:
-            mouseX = event.motion.x;
-            mouseY = event.motion.y;
+            GM->SetMousePos(event.motion.x, event.motion.y);
+            
         }
     }
 }
@@ -120,19 +83,13 @@ void drawGraphics() {
         }
     }
     
-    std::vector<Piece*> pieces = Board::Get()->getPieces();
-    for (Piece* p : pieces) {
-        if (clickedPiece != p)
-            p->Draw(renderer);
-    }
-    if (clickedPiece != nullptr)
-        clickedPiece->Draw(renderer, mouseX - 50, mouseY - 50);
+    GM->Draw(renderer);
 
     SDL_RenderPresent(renderer);
 }
 
 int main(int argc, char** argv) {
-    
+
     running = true;
     fullscreen = false;
 
@@ -143,6 +100,8 @@ int main(int argc, char** argv) {
         std::cout << "Failed to create a window" << std::endl;
 
     ChessMain::Initailize(renderer);
+
+    GM = new GameManager();
 
     Board::Get()->setBoardByFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
 

@@ -1,7 +1,19 @@
 #include "Board.h"
 
 Board::Board() {
-
+	textureMap[1] = ChessMain::wPawnTexture;
+	textureMap[2] = ChessMain::wKnightTexture;
+	textureMap[3] = ChessMain::wBishopTexture;
+	textureMap[4] = ChessMain::wRookTexture;
+	textureMap[5] = ChessMain::wQueenTexture;
+	textureMap[6] = ChessMain::wKingTexture;
+	
+	textureMap[-1] = ChessMain::bPawnTexture;
+	textureMap[-2] = ChessMain::bKnightTexture;
+	textureMap[-3] = ChessMain::bBishopTexture;
+	textureMap[-4] = ChessMain::bRookTexture;
+	textureMap[-5] = ChessMain::bQueenTexture;
+	textureMap[-6] = ChessMain::bKingTexture;
 }
 
 void Board::movePiece(int x1, int y1, int x2, int y2)
@@ -20,6 +32,18 @@ void Board::movePiece(std::bitset<10> piece, int x, int y)
 	}
 }
 
+void Board::removePiece(bitset<10> piece)
+{
+	if (piece != bitset<10>(0)) {
+		auto it = std::find(pieces.begin(), pieces.end(), piece);
+
+		if (it != pieces.end()) {
+			int key = ChessMain::PieceType(*it).to_ulong() * (int)(2 * ((unsigned int)ChessMain::PieceWhite(*it) - 0.5));
+			
+			pieces.erase(it);
+		}
+	}
+}
 bitset<10> Board::getPiece(int x, int y)
 {
 	auto it = std::find_if(pieces.begin(), pieces.end(), [x, y](bitset<10> piece) {
@@ -80,16 +104,24 @@ void Board::addPiece(bool color, int type, int x, int y)
 {
 	bitset<10> piece(0);
 
-	piece[0] = color;
-	
-	piece |= type << 6;
+	piece[9] = color;
 
-	piece |= x << 3;
-	
-	piece |= y << 0;
+	piece |= bitset<10>(type) << 6;
+
+	piece |= bitset<10>(x) << 3;
+
+	piece |= bitset<10>(y) << 0;
 
 	pieces.push_back(piece);
+
+	cout << "PIECE:" << piece << "C:" << color << "T:" << type << "X:" << x << "Y:" << y << endl;
 }
+void Board::addPiece(bitset<10> piece)
+{
+	pieces.push_back(piece);
+}
+
+
 
 void Board::setPiecePosition(bitset<10> piece, int x, int y)
 {
@@ -97,13 +129,8 @@ void Board::setPiecePosition(bitset<10> piece, int x, int y)
 	bitset<10> pieceToRemove = getPiece(x, y);
 
 	// If we can, we do
-	if (pieceToRemove != bitset<10>(0) && pieceToRemove != piece) {
-		auto it = std::find(pieces.begin(), pieces.end(), pieceToRemove);
-		int index = it - pieces.begin();
-
-		// We erase it from existence
-		pieces.erase(pieces.begin() + index);
-	}
+	if (pieceToRemove != piece)
+		removePiece(pieceToRemove);
 
 	// Actually setting the piece position to the new position
 	ChessMain::PieceSetPos(pieces, piece,x, y);
@@ -142,32 +169,36 @@ void Board::setBoardByFEN(std::string FEN)
 				}
 			}
 
+			bool IsUpper = isupper(chars[k]);
+
 			switch (tolower(chars[k])) {
 			case'p':
-				addPiece(isupper(chars[k]), 1, x, y);
+				addPiece(IsUpper, 1, x, y);
 				break;
 			case'n':
-				addPiece(isupper(chars[k]), 2, x, y);
+				addPiece(IsUpper, 2, x, y);
 				break;
 			case'b':
-				addPiece(isupper(chars[k]), 3, x, y);
+				addPiece(IsUpper, 3, x, y);
 				break;						
 			case'r':						
-				addPiece(isupper(chars[k]), 4, x, y);
+				addPiece(IsUpper, 4, x, y);
 				break;						
 			case'q':						
-				addPiece(isupper(chars[k]), 5, x, y);
+				addPiece(IsUpper, 5, x, y);
 				break;						
 			case'k':						
-				addPiece(isupper(chars[k]), 6, x, y);
+				addPiece(IsUpper, 6, x, y);
 				break;
 			}
 			x++;
 		}
 	}
-
-
 }
+map<int, SDL_Texture*> Board::getTextureMap() {
+	return textureMap;
+}
+
 Board* Board::instance = nullptr;
 
 Board* Board::Get()

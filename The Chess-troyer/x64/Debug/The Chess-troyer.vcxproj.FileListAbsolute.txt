@@ -1,1 +1,2 @@
 E:\Documents\Code\c++\Chess Engine\The Chess-troyer\x64\Debug\The Chess-troyer.exe
+E:\Documents\Code\c++\Chess Engine\Chess-Engine\The Chess-troyer\x64\Debug\The Chess-troyer.exe

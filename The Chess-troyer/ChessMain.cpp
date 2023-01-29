@@ -28,6 +28,7 @@ void ChessMain::Initailize(SDL_Renderer* renderer)
 	bRookTexture = IMG_LoadTexture(renderer, "Images/Black ROOK.png");
 	bQueenTexture = IMG_LoadTexture(renderer, "Images/Black QUEEN.png");
 	bKingTexture = IMG_LoadTexture(renderer, "Images/Black KING.png");
+
 }
 /*
 * binary numbers:
@@ -53,39 +54,9 @@ void ChessMain::Initailize(SDL_Renderer* renderer)
 0 100-black rook   (4)
 0 101-black queen  (5)
 0 110-black king   (6)
+
 */
-int ChessMain::StrToBinary(const char* pieceType)
-{
-	if (pieceType == "P")
-		return 1001;
-	if (pieceType == "K")
-		return 1010;
-	if (pieceType == "B")
-		return 1011;
-	if (pieceType == "R")
-		return 1100;
-	if (pieceType == "Q")
-		return 1101;
-	if (pieceType == "K")
-		return 1110;
 
-	if (pieceType == "p")
-		return    1;
-	if (pieceType == "k")
-		return   10;
-	if (pieceType == "b")
-		return   11;
-	if (pieceType == "r")
-		return  100;
-	if (pieceType == "q")
-		return  101;
-	if (pieceType == "k")
-		return  110;
-
-
-	// Invalid
-	return 0x000;
-}
 
 SDL_Texture* ChessMain::TextureByIndex(int type)
 {
@@ -134,12 +105,12 @@ bool ChessMain::IncludesPoint(vector<SDL_Point> list, SDL_Point point)
 
 bool ChessMain::PieceWhite(bitset<10> piece)
 {
-	return piece[0];
+	return piece[9];
 }
 
 bitset<3> ChessMain::PieceType(bitset<10> piece)
 {
-	int IntType = (piece.to_ulong() & 448);
+	int IntType = ((piece >> 6).to_ulong() & 7);
 
 	bitset<3> result(IntType);
 
@@ -149,7 +120,7 @@ bitset<3> ChessMain::PieceType(bitset<10> piece)
 
 bitset<3> ChessMain::PieceX(bitset<10> piece)
 {
-	int IntType = (piece.to_ulong() & 56);
+	int IntType = ((piece >> 3).to_ulong() & 7);
 
 	bitset<3> result(IntType);
 
@@ -165,7 +136,7 @@ bitset<3> ChessMain::PieceY(bitset<10> piece)
 	return result;
 }
 
-void PieceSetPos(std::vector<std::bitset<10>>& pieces, bitset<10>& piece, int x, int y) {
+void ChessMain::PieceSetPos(vector<bitset<10>>& pieces, bitset<10>& piece, int x, int y) {
 	int index = std::find(pieces.begin(), pieces.end(), piece) - pieces.begin();
 
 	piece <<= 3;
@@ -175,4 +146,12 @@ void PieceSetPos(std::vector<std::bitset<10>>& pieces, bitset<10>& piece, int x,
 	piece |= x;
 
 	pieces[index] = piece;
+}
+
+void ChessMain::PieceSetPos(bitset<10>& piece, int x, int y) {
+	piece <<= 3;
+	piece |= x;
+
+	piece <<= 3;
+	piece |= x;
 }
