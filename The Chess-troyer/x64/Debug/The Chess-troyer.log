@@ -1,3 +1,3 @@
-﻿  GameManager.cpp
+﻿  Board.cpp
 E:\Documents\Code\c++\Chess Engine\Chess-Engine\The Chess-troyer\ChessMain.h(49,2): warning C4091: 'static ': ignored on left of 'ChessMain' when no variable is declared
   The Chess-troyer.vcxproj -> E:\Documents\Code\c++\Chess Engine\Chess-Engine\The Chess-troyer\x64\Debug\The Chess-troyer.exe

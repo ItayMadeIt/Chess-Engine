@@ -25,7 +25,9 @@ public:
 	void setPiecePosition(bitset<10> piece, int x, int y);
 	void setBoardByFEN(string FEN);
 
-	map<int, std::vector<bitset<10>>> getPiecesMap();
+	bool canPieceEat(int x, int y, bitset<10> piece);
+	bool canPieceMove(int x, int y, bitset<10> piece);
+
 	map<int, SDL_Texture*> getTextureMap();
 
 	vector<SDL_Point> AvailableMoves(bitset<10> piece);

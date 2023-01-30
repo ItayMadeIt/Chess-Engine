@@ -139,19 +139,19 @@ bitset<3> ChessMain::PieceY(bitset<10> piece)
 void ChessMain::PieceSetPos(vector<bitset<10>>& pieces, bitset<10>& piece, int x, int y) {
 	int index = std::find(pieces.begin(), pieces.end(), piece) - pieces.begin();
 
-	piece <<= 3;
-	piece |= x;
+	piece &= ~(7ull << 3);
+	piece |= bitset<10>(x) << 3;
 
-	piece <<= 3;
-	piece |= x;
+	piece &= ~(7ull);
+	piece |= bitset<10>(y);
 
 	pieces[index] = piece;
 }
 
 void ChessMain::PieceSetPos(bitset<10>& piece, int x, int y) {
-	piece <<= 3;
-	piece |= x;
+	piece &= ~(7ull << 3);
+	piece |= bitset<10>(x) << 3;
 
-	piece <<= 3;
-	piece |= x;
+	piece &= ~(7ull);
+	piece |= bitset<10>(y);
 }

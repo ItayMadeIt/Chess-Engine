@@ -68,7 +68,7 @@ vector<SDL_Point> Board::AvailableMoves(std::bitset<10> piece)
 	int pieceType_ = ChessMain::PieceType(piece).to_ulong() % 1000;
 
 	// If we are white its -1 if we are black its 1 (because in SDL y is upside down)
-	int forward = ChessMain::PieceType(piece).to_ulong() >= 1000 ? -1 : 1;
+	int forward = ChessMain::PieceWhite(piece) ? -1 : 1;
 
 	vector<SDL_Point> moves;
 	int x = ChessMain::PieceX(piece).to_ulong();
@@ -79,7 +79,7 @@ vector<SDL_Point> Board::AvailableMoves(std::bitset<10> piece)
 		// PAWN
 
 		// Move forward one square if there is no one there
-		if (getPiece(x, y + forward) == bitset<10>())
+		if (getPiece(x, y + forward) == bitset<10>(0))
 			moves.push_back({ x, y + forward });
 
 		// Move two squares if there is no one there and you are in your starting position
@@ -87,17 +87,68 @@ vector<SDL_Point> Board::AvailableMoves(std::bitset<10> piece)
 			moves.push_back({ x, y + forward * 2 });
 
 		// Move a square (left or right) and forward (eat it) if there is the opposite color.
-		if (getPiece(x - 1, y + forward) != bitset<10>(0))
-			if (ChessMain::PieceWhite(getPiece(x - 1, y + forward)) != ChessMain::PieceWhite(piece)) {
-				moves.push_back({ x - 1, y + forward });
-			}
-		if (getPiece(x + 1, y + forward) != bitset<10>(0))
-			if (ChessMain::PieceWhite(getPiece(x + 1, y + forward)) != ChessMain::PieceWhite(piece)) {
-				moves.push_back({ x + 1, y + forward });
-			}
+		if (canPieceEat(x - 1, y + forward, piece))
+			moves.push_back({ x - 1, y + forward });
+
+		if (canPieceEat(x + 1, y + forward, piece))
+			moves.push_back({ x + 1, y + forward });
+			
+
+	case 2:
+		// KNIGHT
+
+		if (canPieceMove(x + 2, y + 1, piece))
+			moves.push_back({ x + 2, y + 1 });
+
+
+		if (canPieceMove(x + 2, y - 1, piece))
+			moves.push_back({ x + 2, y - 1 });
+
+
+		if (canPieceMove(x + 1, y + 2, piece))
+			moves.push_back({ x + 1, y + 2 });
+
+
+		if (canPieceMove(x + 1, y - 2, piece))
+			moves.push_back({ x + 1, y - 2});
+
+
+		if (canPieceMove(x - 1, y + 2, piece))
+			moves.push_back({ x - 1, y + 2 });
+
+
+		if (canPieceMove(x - 1, y - 2, piece))
+			moves.push_back({ x - 1, y - 2 });
+
+
+		if (canPieceMove(x - 2, y + 1, piece))
+			moves.push_back({ x - 2, y + 1 });
+
+
+		if (canPieceMove(x - 2, y - 1, piece))
+			moves.push_back({ x - 2, y - 1 });
+
 	}
 
 	return moves;
+}
+
+bool Board::canPieceEat(int x, int y, bitset<10> piece)
+{
+	bool notNull = getPiece(x, y) != bitset<10>(0);
+
+	bool IsOppositeColor = ChessMain::PieceWhite(getPiece(x, y)) != ChessMain::PieceWhite(piece);
+
+	return notNull && IsOppositeColor;
+}
+
+bool Board::canPieceMove(int x, int y, bitset<10> piece)
+{
+	bool isNull = getPiece(x, y) == bitset<10>(0);
+
+	bool isOppositeColor = ChessMain::PieceWhite(getPiece(x, y)) != ChessMain::PieceWhite(piece);
+
+	return isOppositeColor || isNull;
 }
 
 void Board::addPiece(bool color, int type, int x, int y)
@@ -152,7 +203,8 @@ void Board::setBoardByFEN(std::string FEN)
 		for (int k = 0; k < i.size() ; k++)
 		{
 			if (std::isdigit(chars[k])) {
-				x += (int)chars[k];
+				x += (chars[k] - 48);
+				cout << "Added X:" << (chars[k] - 48) << " Char:" << chars[k] << endl;
 				continue;
 			}
 
