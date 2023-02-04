@@ -8,7 +8,7 @@ using namespace std;
 class GameManager
 {
 public:
-	GameManager();
+	GameManager(SDL_Color movesColor);
 
 	void SetMousePos(int x, int y);
 
@@ -23,10 +23,16 @@ public:
 	int GetX();
 	int GetY();
 
+	void updateEnPassantVar(bitset<4>& enPassantVar, SDL_Point move);
+	void updateCastlingMoves(bitset<3>& blackCastleState, bitset<3>& whiteCastleState);
+
+
 private:
 
 	int mouseX = 0, mouseY = 0;
 	bool clicking;
 	bitset<10> clickedPiece;
+	SDL_Color movesColor;
+	vector<SDL_Point> moves;
 };
 

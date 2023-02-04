@@ -34,6 +34,12 @@ public:
 
 	static Board* Get();
 
+	bitset<3> blackCastleState; // 0 - left rook moved, 1 - king moved, 2 - right rook moved
+	bitset<3> whiteCastleState; // 0 - left rook moved, 1 - king moved, 2 - right rook moved
+
+	bitset<4> lastEnPassant; // a variable that holds the info of the last double pawn move (color and X pos)
+	
+
 private:
 	Board();
 	static Board* instance;

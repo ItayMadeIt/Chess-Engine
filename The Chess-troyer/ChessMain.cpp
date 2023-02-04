@@ -12,6 +12,7 @@ SDL_Texture* ChessMain::bBishopTexture = nullptr;
 SDL_Texture* ChessMain::bRookTexture = nullptr;
 SDL_Texture* ChessMain::bQueenTexture = nullptr;
 SDL_Texture* ChessMain::bKingTexture = nullptr;
+SDL_Texture* ChessMain::circleTexture = nullptr;
 
 void ChessMain::Initailize(SDL_Renderer* renderer)
 {
@@ -28,6 +29,8 @@ void ChessMain::Initailize(SDL_Renderer* renderer)
 	bRookTexture = IMG_LoadTexture(renderer, "Images/Black ROOK.png");
 	bQueenTexture = IMG_LoadTexture(renderer, "Images/Black QUEEN.png");
 	bKingTexture = IMG_LoadTexture(renderer, "Images/Black KING.png");
+	
+	circleTexture = IMG_LoadTexture(renderer, "Images/circle.png");
 
 }
 /*
@@ -154,4 +157,9 @@ void ChessMain::PieceSetPos(bitset<10>& piece, int x, int y) {
 
 	piece &= ~(7ull);
 	piece |= bitset<10>(y);
+}
+
+bool ChessMain::PieceMatchesEnPassant(bitset<10> piece, bitset<4> enPassantOnPiece) {
+	
+	return PieceX(piece).to_ulong() == (enPassantOnPiece.to_ulong() & 7) && piece[9] == enPassantOnPiece[3];
 }

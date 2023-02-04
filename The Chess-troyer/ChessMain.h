@@ -29,6 +29,8 @@ public:
 	static SDL_Texture* bQueenTexture;
 	static SDL_Texture* bKingTexture;
 
+	static SDL_Texture* circleTexture;
+
 	static void Initailize(SDL_Renderer* renderer);
 
 	static SDL_Texture* TextureByIndex(int type);
@@ -46,5 +48,7 @@ public:
 	static void PieceSetPos(std::vector<std::bitset<10>>& pieces, bitset<10>& piece, int x, int y);
 
 	static void PieceSetPos(bitset<10>& piece, int x, int y);
+	
+	static bool PieceMatchesEnPassant(bitset<10> piece, bitset<4> enPassantOnPiece);
 };
 #endif // !CHESSMAIN_HEADER

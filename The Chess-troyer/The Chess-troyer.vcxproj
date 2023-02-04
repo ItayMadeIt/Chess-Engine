@@ -162,6 +162,7 @@
     <Image Include="Images\Black QUEEN.png" />
     <Image Include="Images\Black ROOK.png" />
     <Image Include="Images\Board.png" />
+    <Image Include="Images\Circle.png" />
     <Image Include="White BISHOP.png" />
     <Image Include="White KING.png" />
     <Image Include="White KNIGHT.png" />

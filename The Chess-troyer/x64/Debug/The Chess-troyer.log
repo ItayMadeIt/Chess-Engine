@@ -1,3 +1,12 @@
 ﻿  Board.cpp
-E:\Documents\Code\c++\Chess Engine\Chess-Engine\The Chess-troyer\ChessMain.h(49,2): warning C4091: 'static ': ignored on left of 'ChessMain' when no variable is declared
+E:\Documents\Code\c++\Chess Engine\Chess-Engine\The Chess-troyer\ChessMain.h(53,2): warning C4091: 'static ': ignored on left of 'ChessMain' when no variable is declared
+  ChessMain.cpp
+E:\Documents\Code\c++\Chess Engine\Chess-Engine\The Chess-troyer\ChessMain.h(53,2): warning C4091: 'static ': ignored on left of 'ChessMain' when no variable is declared
+E:\Documents\Code\c++\Chess Engine\Chess-Engine\The Chess-troyer\ChessMain.cpp(143,12): warning C4244: 'initializing': conversion from '__int64' to 'int', possible loss of data
+  GameManager.cpp
+E:\Documents\Code\c++\Chess Engine\Chess-Engine\The Chess-troyer\ChessMain.h(53,2): warning C4091: 'static ': ignored on left of 'ChessMain' when no variable is declared
+  Main.cpp
+E:\Documents\Code\c++\Chess Engine\Chess-Engine\The Chess-troyer\ChessMain.h(53,2): warning C4091: 'static ': ignored on left of 'ChessMain' when no variable is declared
+E:\Documents\Code\c++\Chess Engine\Chess-Engine\The Chess-troyer\Main.cpp(134,44): warning C4244: 'argument': conversion from 'float' to 'Uint32', possible loss of data
+  Generating Code...
   The Chess-troyer.vcxproj -> E:\Documents\Code\c++\Chess Engine\Chess-Engine\The Chess-troyer\x64\Debug\The Chess-troyer.exe

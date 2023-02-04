@@ -52,7 +52,6 @@ void handleInput() {
             break;
         case SDL_MOUSEBUTTONDOWN:
             if (event.button.button == SDL_BUTTON_LEFT && event.button.state == SDL_PRESSED) {
-                std::cout << GM->GetX() << ", " << GM->GetY() << std::endl;
                 GM->OnLeftMButton();
             }
         case SDL_MOUSEMOTION:
@@ -98,10 +97,11 @@ int main(int argc, char** argv) {
 
     if (SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, 0, &window, &renderer))
         std::cout << "Failed to create a window" << std::endl;
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
     ChessMain::Initailize(renderer);
 
-    GM = new GameManager();
+    GM = new GameManager({ 2, 2, 2, 100});
 
     Board::Get()->setBoardByFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
 
